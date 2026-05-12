@@ -156,25 +156,26 @@ export default function ChatDrawer({ open, onClose }: ChatDrawerProps) {
         </div>
       )}
 
-      {/* Input */}
-      <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-md border-t border-white/10 p-3">
-        <div className="flex items-center gap-2">
-          <input 
-            type="text" 
-            value={input} 
-            onChange={(e) => setInput(e.target.value)} 
-            onKeyDown={handleKeyDown}
-            placeholder="Ask anything..." 
-            disabled={sending}
-            className="flex-1 px-4 py-2.5 bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg focus:outline-none focus:border-white/40 focus:bg-white/15 text-sm disabled:opacity-50 transition-all duration-200 backdrop-blur-sm" 
-          />
-          <button 
-            onClick={() => handleSend()} 
-            disabled={!input.trim() || sending}
-            className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-lg flex items-center justify-center hover:shadow-lg hover:shadow-blue-500/50 disabled:opacity-50 transition-all duration-200 active:scale-95"
-          >
-            <Send className="w-4 h-4" />
-          </button>
+        {/* Input */}
+        <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-md border-t border-white/10 p-3">
+          <div className="flex items-center gap-2">
+            <input 
+              type="text" 
+              value={input} 
+              onChange={(e) => setInput(e.target.value)} 
+              onKeyDown={handleKeyDown}
+              placeholder="Ask anything..." 
+              disabled={sending}
+              className="flex-1 px-4 py-2.5 bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg focus:outline-none focus:border-white/40 focus:bg-white/15 text-sm disabled:opacity-50 transition-all duration-200 backdrop-blur-sm" 
+            />
+            <button 
+              onClick={() => handleSend()} 
+              disabled={!input.trim() || sending}
+              className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-lg flex items-center justify-center hover:shadow-lg hover:shadow-blue-500/50 disabled:opacity-50 transition-all duration-200 active:scale-95"
+            >
+              <Send className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
