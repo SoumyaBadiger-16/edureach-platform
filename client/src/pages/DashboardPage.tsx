@@ -1,4 +1,5 @@
 import { useAuth } from "../context/AuthContext";
+import { useInterest } from "../context/InterestContext";
 import {
   BookOpen,
   Users,
@@ -17,9 +18,12 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
+import InterestSelector from "../components/InterestSelector";
 
 export default function DashboardPage() {
   const { user, logout } = useAuth();
+  const { selectedInterest } = useInterest();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -68,33 +72,31 @@ export default function DashboardPage() {
     },
   ];
 
-  // Active courses
-  const activeCourses = [
-    {
-      id: 1,
-      name: "AI & Machine Learning",
-      instructor: "Dr. Rajesh Kumar",
-      progress: 75,
-      semester: "Fall 2024",
-      color: "from-blue-500 to-cyan-400",
-    },
-    {
-      id: 2,
-      name: "Cloud Computing",
-      instructor: "Prof. Ananya Singh",
-      progress: 60,
-      semester: "Fall 2024",
-      color: "from-purple-500 to-pink-400",
-    },
-    {
-      id: 3,
-      name: "Data Structures",
-      instructor: "Dr. Vikram Patel",
-      progress: 85,
-      semester: "Fall 2024",
-      color: "from-green-500 to-emerald-400",
-    },
-  ];
+  // Active courses (personalized by interest)
+  const coursesByInterest = {
+    AI: [
+      { id: 1, name: "AI & Machine Learning", instructor: "Dr. Rajesh Kumar", progress: 75, semester: "Fall 2024", color: "from-blue-500 to-cyan-400" },
+      { id: 2, name: "Deep Learning Fundamentals", instructor: "Prof. Ananya Singh", progress: 60, semester: "Fall 2024", color: "from-purple-500 to-pink-400" },
+      { id: 3, name: "Natural Language Processing", instructor: "Dr. Vikram Patel", progress: 85, semester: "Fall 2024", color: "from-green-500 to-emerald-400" },
+    ],
+    Coding: [
+      { id: 1, name: "Advanced JavaScript", instructor: "Dr. Rajesh Kumar", progress: 80, semester: "Fall 2024", color: "from-blue-500 to-cyan-400" },
+      { id: 2, name: "React.js Mastery", instructor: "Prof. Ananya Singh", progress: 70, semester: "Fall 2024", color: "from-purple-500 to-pink-400" },
+      { id: 3, name: "Backend Development", instructor: "Dr. Vikram Patel", progress: 65, semester: "Fall 2024", color: "from-green-500 to-emerald-400" },
+    ],
+    MBA: [
+      { id: 1, name: "Business Strategy", instructor: "Dr. Rajesh Kumar", progress: 72, semester: "Fall 2024", color: "from-blue-500 to-cyan-400" },
+      { id: 2, name: "Financial Management", instructor: "Prof. Ananya Singh", progress: 68, semester: "Fall 2024", color: "from-purple-500 to-pink-400" },
+      { id: 3, name: "Marketing Analytics", instructor: "Dr. Vikram Patel", progress: 82, semester: "Fall 2024", color: "from-green-500 to-emerald-400" },
+    ],
+    Robotics: [
+      { id: 1, name: "Robotics Fundamentals", instructor: "Dr. Rajesh Kumar", progress: 78, semester: "Fall 2024", color: "from-blue-500 to-cyan-400" },
+      { id: 2, name: "Control Systems", instructor: "Prof. Ananya Singh", progress: 65, semester: "Fall 2024", color: "from-purple-500 to-pink-400" },
+      { id: 3, name: "Embedded Systems", instructor: "Dr. Vikram Patel", progress: 80, semester: "Fall 2024", color: "from-green-500 to-emerald-400" },
+    ],
+  };
+
+  const activeCourses = selectedInterest ? coursesByInterest[selectedInterest] : coursesByInterest.AI;
 
   // Upcoming events
   const upcomingEvents = [
@@ -133,6 +135,9 @@ export default function DashboardPage() {
         <div className="absolute -bottom-8 left-1/2 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
 
+      {/* Interest Selector */}
+      <InterestSelector />
+
       {/* Header Section */}
       <div className="sticky top-0 z-30 bg-black/40 backdrop-blur-xl border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -154,11 +159,15 @@ export default function DashboardPage() {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {statCards.map((card) => {
+          {statCards.map((card, index) => {
             const Icon = card.icon;
             return (
-              <div
+              <motion.div
                 key={card.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -5, scale: 1.02 }}
                 className={`group relative bg-gradient-to-br ${card.bgColor} backdrop-blur-xl border ${card.borderColor} rounded-2xl p-6 hover:border-white/30 transition-all duration-300 overflow-hidden`}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/0 group-hover:from-white/10 group-hover:to-white/5 transition-all duration-300"></div>
@@ -185,7 +194,7 @@ export default function DashboardPage() {
                     </div>
                   )}
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>
@@ -202,9 +211,13 @@ export default function DashboardPage() {
               <button className="text-blue-400 text-sm font-medium hover:text-blue-300 transition-colors">View All</button>
             </div>
 
-            {activeCourses.map((course) => (
-              <div
+            {activeCourses.map((course, index) => (
+              <motion.div
                 key={course.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                whileHover={{ scale: 1.02 }}
                 className="group bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all duration-300 cursor-pointer overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
@@ -229,7 +242,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -301,19 +314,19 @@ export default function DashboardPage() {
 
           {/* Quick Actions */}
           <div className="space-y-3">
-            <button className="w-full bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white font-semibold py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group">
-              <BookOpen className="w-5 h-5" />
-              <span>Start New Lesson</span>
+            <button onClick={() => navigate("/counselor")} className="w-full bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white font-semibold py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group">
+              <Brain className="w-5 h-5" />
+              <span>Chat with AI Counselor</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="w-full bg-gradient-to-r from-purple-500 to-pink-400 hover:from-purple-600 hover:to-pink-500 text-white font-semibold py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group">
-              <Users className="w-5 h-5" />
-              <span>Schedule Mentor</span>
+            <button onClick={() => navigate("/career-roadmap")} className="w-full bg-gradient-to-r from-purple-500 to-pink-400 hover:from-purple-600 hover:to-pink-500 text-white font-semibold py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group">
+              <TrendingUp className="w-5 h-5" />
+              <span>View Career Roadmap</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="w-full bg-gradient-to-r from-orange-500 to-red-400 hover:from-orange-600 hover:to-red-500 text-white font-semibold py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group">
-              <FileText className="w-5 h-5" />
-              <span>Download Certificate</span>
+            <button onClick={() => navigate("/placement-simulator")} className="w-full bg-gradient-to-r from-orange-500 to-red-400 hover:from-orange-600 hover:to-red-500 text-white font-semibold py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group">
+              <BarChart3 className="w-5 h-5" />
+              <span>Check Placement Prediction</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
