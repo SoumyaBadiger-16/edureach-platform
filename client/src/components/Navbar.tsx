@@ -38,9 +38,12 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-3">
           {user ? (
             <div className="flex items-center gap-4">
+              <Link to="/dashboard" className="text-sm text-maroon font-medium hover:text-maroon-dark transition-colors duration-200">
+                My Dashboard
+              </Link>
               <span className="text-sm text-gray-600">Hi, {user.name.split(" ")[0]}</span>
               <button onClick={handleLogout}
-                className="flex items-center gap-1 text-sm bg-maroon/10 text-maroon px-3 py-1.5 rounded-lg hover:bg-maroon hover:text-white transition-colors duration-200">
+                className="flex items-center gap-1 text-sm bg-red-600 text-white px-3 py-1.5 rounded-lg hover:bg-red-700 transition-colors duration-200">
                 <LogOut className="w-4 h-4" /> Logout
               </button>
             </div>
@@ -67,9 +70,14 @@ export default function Navbar() {
           ))}
           <div className="pt-3 border-t border-gray-100">
             {user ? (
-              <button onClick={handleLogout} className="flex items-center gap-2 text-maroon font-medium">
-                <LogOut className="w-4 h-4" /> Logout
-              </button>
+              <div className="space-y-3">
+                <Link to="/dashboard" onClick={() => setMenuOpen(false)} className="block text-maroon font-medium">
+                  My Dashboard
+                </Link>
+                <button onClick={handleLogout} className="w-full flex items-center gap-2 text-red-600 font-medium">
+                  <LogOut className="w-4 h-4" /> Logout
+                </button>
+              </div>
             ) : (
               <div className="flex gap-3">
                 <Link to="/login" onClick={() => setMenuOpen(false)} className="text-maroon font-medium">Login</Link>
