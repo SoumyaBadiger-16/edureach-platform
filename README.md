@@ -110,11 +110,6 @@ Start the backend:
 
 ```bash
 uvicorn main:app --reload
-```
-
-## 📸 Screenshots
-
-Add screenshots of the application here.
 
 ## 📖 Usage
 
